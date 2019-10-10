@@ -14,12 +14,12 @@ import (
 // use.
 var db = dynamodb.New(session.New(), aws.NewConfig().WithRegion("us-east-1"))
 
-type HashTotals struct {
-	Index int64  `json:"index"`
-	Hash  string `json:"hash"`
+type hashTotals struct {
+	totalCount    int64
+	totalDuration int64
 }
 
-func getStats(index int) (*HashTotals, error) {
+func getStats() (*hashTotals, error) {
 	// Prepare the input for the query.
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String("statistics"),
@@ -35,10 +35,10 @@ func getStats(index int) (*HashTotals, error) {
 	result, err := db.GetItem(input)
 	if err != nil {
 		log.Printf("Error recevied looking up stats from DB: %s", err)
-		return new(HashTotals), err
+		return new(hashTotals), err
 	}
 	if result.Item == nil {
-		return new(HashTotals), nil
+		return new(hashTotals), nil
 	}
 
 	// The result.Item object returned has the underlying type
@@ -46,11 +46,11 @@ func getStats(index int) (*HashTotals, error) {
 	// to parse this straight into the fields of a struct. Note:
 	// UnmarshalListOfMaps also exists if you are working with multiple
 	// items.
-	totals := new(HashTotals)
+	totals := new(hashTotals)
 	err = dynamodbattribute.UnmarshalMap(result.Item, totals)
 	if err != nil {
 		log.Printf("Error received unmarshalling stats from DB: %s", err)
-		return new(HashTotals), err
+		return new(hashTotals), err
 	}
 
 	return totals, nil
