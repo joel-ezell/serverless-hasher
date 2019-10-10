@@ -33,14 +33,9 @@ func getInstance() *statistics {
 
 // UpdateAverage This thread-safe function calculates and stores a new average, incorporating the provided value.
 // The updated average is returned.
+// As I separate out into separate lambda functions I may collapse the DynamoDB code into the same files as the business logic in some cases.
 func UpdateAverage(newDuration int64) {
-	// Another way to do this which would have slightly higher accuracy would be to simply maintain a running total and number of averaged values.
 	updateStats(newDuration)
-	// newTotal := (stats.floatAverage*float64(stats.NumAveraged) + float64(newDuration))
-	// stats.NumAveraged++
-	// stats.floatAverage = newTotal / float64(stats.NumAveraged)
-	// stats.Average = int64(math.Round(stats.floatAverage))
-	// return stats.Average
 }
 
 // GetStats returns a JSON encoded string representing the statistics
@@ -48,7 +43,7 @@ func GetStats() (string, error) {
 	totalStats, err := getStats()
 	stats := new(statistics)
 	stats.NumAveraged = totalStats.totalCount
-	stats.Average = totalStats.totalDuration / totalStats.totalCount;
+	stats.Average = totalStats.totalDuration / totalStats.totalCount
 	b, err := json.Marshal(stats)
 	if err != nil {
 		msg := fmt.Sprintf("Received error when marshalling JSON: %s", err)

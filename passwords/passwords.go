@@ -3,6 +3,7 @@ package passwords
 import (
 	"crypto/sha512"
 	"encoding/base64"
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -38,12 +39,15 @@ func getInstance() *passwords {
 func HashAndStore(pwd string) (int, error) {
 	start := time.Now()
 	index := nextIndex()
+	fmt.Print("Starting worker\n")
 	go hashWorker(index, pwd, start)
 	return index, nil
 }
 
 func hashWorker(index int, pwd string, start time.Time) {
+	fmt.Printf("Before sleep\n")
 	time.Sleep(delaySecs * time.Second)
+	fmt.Printf("After sleep\n")
 	sha := sha512.New()
 	sha.Write([]byte(pwd))
 	encodedPwd := base64.StdEncoding.EncodeToString(sha.Sum(nil))

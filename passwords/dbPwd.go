@@ -98,22 +98,6 @@ func nextIndex() int {
 				S: aws.String(indexKeyName),
 			},
 		},
-		// TableName:    aws.String("counters"),
-		// ReturnValues: aws.String("UPDATED_NEW"),
-		// ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-		// 	":a": {
-		// 		N: aws.String(strconv.Itoa(1)),
-		// 	},
-		// },
-		// ExpressionAttributeNames: map[string]*string{
-		// 	"#v": aws.String("currentValue"),
-		// },
-		// UpdateExpression: aws.String("SET #v = #v + :a"),
-		// Key: map[string]*dynamodb.AttributeValue{
-		// 	"counterName": {
-		// 		S: aws.String("importantCounter"),
-		// 	},
-		// },
 	}
 
 	result, err := db.UpdateItem(input)
