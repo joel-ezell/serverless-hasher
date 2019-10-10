@@ -1,6 +1,7 @@
 package statistics
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -56,12 +57,8 @@ func getStats() (*hashTotals, error) {
 	return totals, nil
 }
 
-// type statsItem struct {
-// 	TotalCount    int `json:"totalCount"`
-// 	TotalDuration int `json:"totalDuration"`
-// }
-
 func updateStats(newDuration int64) error {
+	fmt.Printf("Updating with new duration %d\n", newDuration)
 	input := &dynamodb.UpdateItemInput{
 		TableName:    aws.String("statistics"),
 		ReturnValues: aws.String("UPDATED_NEW"),
